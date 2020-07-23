@@ -16,7 +16,9 @@ import org.apache.commons.logging.LogFactory;
 
 
 import com.example.rest.dao.PedidoModel;
+import com.example.rest.dao.UbigeoModel;
 import com.example.rest.entidades.Pedido;
+import com.example.rest.entidades.Ubigeo;
 
 
 
@@ -28,6 +30,7 @@ public class ServicioRest {
 	private static final Log log = LogFactory.getLog(ServicioRest.class);
 	
 	private PedidoModel daoPe = new PedidoModel();
+	private UbigeoModel daoUbi= new UbigeoModel();
 
 	
 	
@@ -48,6 +51,32 @@ public class ServicioRest {
 	public Response registroPedido(Pedido obj) {
 		log.info("rest registroPedido ");
 		return Response.ok(daoPe.inserta(obj)).build();
+	}
+	
+	@GET
+	@Path("/departamentos")
+	public Response listarDepartamentos() {
+		log.info("listar departamentos");
+		return Response.ok(daoUbi.listarDepartamentos()).build();
+	}
+
+	@GET
+	@Path("/provincias/{depa}")
+	public Response listarProvincias(@PathParam("depa") String idDepa) {
+		log.info("listar provincias");
+		Ubigeo obj = new Ubigeo();
+		obj.setDepartamento(idDepa);
+		return Response.ok(daoUbi.listarProvincia(obj)).build();
+	}
+
+	@GET
+	@Path("/distritos/{depa}/{pro}")
+	public Response listarDistritos(@PathParam("depa") String idDepa, @PathParam("pro") String idPro) {
+		log.info("listar Distritos");
+		Ubigeo obj = new Ubigeo();
+		obj.setDepartamento(idDepa);
+		obj.setProvincia(idPro);
+		return Response.ok(daoUbi.listarDistrito(obj)).build();
 	}
 
 	
